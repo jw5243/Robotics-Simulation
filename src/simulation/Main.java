@@ -145,20 +145,22 @@ public class Main extends Application {
     }
 
     private void drawLinearExtension(GraphicsContext graphicsContext) {
-        final double lineWidth = 3d;
-        final FloatPoint startPosition = new FloatPoint(Screen.getScreenWidth() / 2 - 16d / Screen.getInchesPerPixel(), 0d);
-        graphicsContext.setLineWidth(lineWidth);
-        graphicsContext.setStroke(new Color(0d, 1d, 1d, 1d));
-        if(MessageProcessing.getLinearExtensionType().equals(MessageProcessing.LinearExtensionType.CASCADE)) {
-            double stageHeightIncrement = MessageProcessing.getLinearExtensionPosition() / (MessageProcessing.getLinearStageCount() - 1);
-            for(int i = 0; i < MessageProcessing.getLinearStageCount(); i++) {
-                graphicsContext.strokeRect(startPosition.x, Screen.getScreenHeight() - startPosition.y - MessageProcessing.getStageLength() / Screen.getInchesPerPixel(),
-                        4d / Screen.getInchesPerPixel(), MessageProcessing.getStageLength() / Screen.getInchesPerPixel());
-                startPosition.x += 4d / Screen.getInchesPerPixel();
-                startPosition.y += stageHeightIncrement / Screen.getInchesPerPixel();
-            }
-        } else {
+        if(MessageProcessing.getLinearStageCount() > 1) {
+            final double lineWidth = 5d;
+            final FloatPoint startPosition = new FloatPoint(Screen.getScreenWidth() / 2 - 16d / Screen.getInchesPerPixel(), 0d);
+            graphicsContext.setLineWidth(lineWidth);
+            graphicsContext.setStroke(new Color(0d, 1d, 1d, 1d));
+            if (MessageProcessing.getLinearExtensionType().equals(MessageProcessing.LinearExtensionType.CASCADE)) {
+                double stageHeightIncrement = MessageProcessing.getLinearExtensionPosition() / (MessageProcessing.getLinearStageCount() - 1);
+                for (int i = 0; i < MessageProcessing.getLinearStageCount(); i++) {
+                    graphicsContext.strokeRect(startPosition.x, Screen.getScreenHeight() - startPosition.y - MessageProcessing.getStageLength() / Screen.getInchesPerPixel(),
+                            4d / Screen.getInchesPerPixel(), MessageProcessing.getStageLength() / Screen.getInchesPerPixel());
+                    startPosition.x += 4d / Screen.getInchesPerPixel();
+                    startPosition.y += stageHeightIncrement / Screen.getInchesPerPixel();
+                }
+            } else {
 
+            }
         }
     }
 

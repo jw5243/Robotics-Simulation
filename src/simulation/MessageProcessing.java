@@ -22,15 +22,14 @@ public class MessageProcessing {
     private static double robotVelocityX = 0;
     private static double robotVelocityY = 0;
 
-    private static double linearExtensionPosition = 18d; //in
+    private static double linearExtensionPosition = 0d; //in
     private static double stageLength = 18d; //in
-    private static int linearStageCount = 6;
+    private static int linearStageCount = 1;
     private static LinearExtensionType linearExtensionType = LinearExtensionType.CASCADE;
 
     public static void processMessage(String receivedMessage) {
         //first there might be multiple messages in one packet. These are separated by '%'
         String[] splitMessages = receivedMessage.split("%");
-
         //go through all the messages now
         for(String message : splitMessages) {
             //the individual messages are split using commas
