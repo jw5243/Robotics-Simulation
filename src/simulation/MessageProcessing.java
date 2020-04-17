@@ -3,6 +3,10 @@ package simulation;
 import java.util.ArrayList;
 
 public class MessageProcessing {
+    public enum LinearExtensionType {
+        CONTINUOUS, CASCADE
+    }
+
     //this handles the list of debugPoints to be drawn on the screen
     private static ArrayList<FloatPoint> debugPoints = new ArrayList<>();
 
@@ -17,6 +21,11 @@ public class MessageProcessing {
 
     private static double robotVelocityX = 0;
     private static double robotVelocityY = 0;
+
+    private static double linearExtensionPosition = 18d; //in
+    private static double stageLength = 18d; //in
+    private static int linearStageCount = 6;
+    private static LinearExtensionType linearExtensionType = LinearExtensionType.CASCADE;
 
     public static void processMessage(String receivedMessage) {
         //first there might be multiple messages in one packet. These are separated by '%'
@@ -55,6 +64,16 @@ public class MessageProcessing {
                             if(ProfileDashboard.hasInitialized()) {
                                 ProfileDashboard.resetProfile();
                             }
+                        } else if(id.equals("LinearPosition")) {
+                            processLinearExtensionPosition(splitString);
+                        } else if(id.equals("StageLength")) {
+                            processStageLength(splitString);
+                        } else if(id.equals("StageCount")) {
+                            processStageCount(splitString);
+                        } else if(id.equals("Continuous")) {
+                            setLinearExtensionType(LinearExtensionType.CONTINUOUS);
+                        } else if(id.equals("Cascade")) {
+                            setLinearExtensionType(LinearExtensionType.CASCADE);
                         }
                         
                         if(id.length() >= 5) {
@@ -67,6 +86,30 @@ public class MessageProcessing {
                 }
             }
         }
+    }
+
+    public static void processStageLength(String[] splitString) {
+        if(splitString.length != 2) {
+            return;
+        }
+
+        setStageLength(Double.parseDouble(splitString[1]));
+    }
+
+    public static void processStageCount(String[] splitString) {
+        if(splitString.length != 2) {
+            return;
+        }
+
+        setLinearStageCount(Integer.parseInt(splitString[1]));
+    }
+
+    public static void processLinearExtensionPosition(String[] splitString) {
+        if(splitString.length != 2) {
+            return;
+        }
+
+        setLinearExtensionPosition(Double.parseDouble(splitString[1]));
     }
 
     public static void processPosition(String[] splitString) {
@@ -253,5 +296,37 @@ public class MessageProcessing {
 
     public static void setRobotVelocityY(double robotVelocityY) {
         MessageProcessing.robotVelocityY = robotVelocityY;
+    }
+
+    public static double getLinearExtensionPosition() {
+        return linearExtensionPosition;
+    }
+
+    public static void setLinearExtensionPosition(double linearExtensionPosition) {
+        MessageProcessing.linearExtensionPosition = linearExtensionPosition;
+    }
+
+    public static LinearExtensionType getLinearExtensionType() {
+        return linearExtensionType;
+    }
+
+    public static void setLinearExtensionType(LinearExtensionType linearExtensionType) {
+        MessageProcessing.linearExtensionType = linearExtensionType;
+    }
+
+    public static int getLinearStageCount() {
+        return linearStageCount;
+    }
+
+    public static void setLinearStageCount(int linearStageCount) {
+        MessageProcessing.linearStageCount = linearStageCount;
+    }
+
+    public static double getStageLength() {
+        return stageLength;
+    }
+
+    public static void setStageLength(double stageLength) {
+        MessageProcessing.stageLength = stageLength;
     }
 }

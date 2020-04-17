@@ -52,6 +52,7 @@ public class Main extends Application {
         setRootGroup(new Group());
         setLogGroup(new Group());
         setMainHBox(new HBox());
+
         setScene(new Scene(getRootGroup(), Screen.getScreenWidth(), Screen.getScreenHeight()));
         getMainHBox().prefWidthProperty().bind(primaryStage.widthProperty());
         getMainHBox().prefHeightProperty().bind(primaryStage.heightProperty());
@@ -137,9 +138,28 @@ public class Main extends Application {
 
     private void drawScreen(GraphicsContext graphicsContext) {
         graphicsContext.clearRect(0d, 0d, Screen.getScreenWidth(), Screen.getScreenHeight());
+        drawLinearExtension(graphicsContext);
         drawRobot(graphicsContext);
         drawDebugLines(graphicsContext);
         drawDebugPoints(graphicsContext);
+    }
+
+    private void drawLinearExtension(GraphicsContext graphicsContext) {
+        final double lineWidth = 3d;
+        final FloatPoint startPosition = new FloatPoint(Screen.getScreenWidth() / 2 - 16d / Screen.getInchesPerPixel(), 0d);
+        graphicsContext.setLineWidth(lineWidth);
+        graphicsContext.setStroke(new Color(0d, 1d, 1d, 1d));
+        if(MessageProcessing.getLinearExtensionType().equals(MessageProcessing.LinearExtensionType.CASCADE)) {
+            double stageHeightIncrement = MessageProcessing.getLinearExtensionPosition() / (MessageProcessing.getLinearStageCount() - 1);
+            for(int i = 0; i < MessageProcessing.getLinearStageCount(); i++) {
+                graphicsContext.strokeRect(startPosition.x, Screen.getScreenHeight() - startPosition.y - MessageProcessing.getStageLength() / Screen.getInchesPerPixel(),
+                        4d / Screen.getInchesPerPixel(), MessageProcessing.getStageLength() / Screen.getInchesPerPixel());
+                startPosition.x += 4d / Screen.getInchesPerPixel();
+                startPosition.y += stageHeightIncrement / Screen.getInchesPerPixel();
+            }
+        } else {
+
+        }
     }
 
     private void followRobot(double robotX, double robotY) {

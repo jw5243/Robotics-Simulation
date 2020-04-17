@@ -70,7 +70,7 @@ public class Screen {
     
     /**
      * Gets the screen size in real scale. This needs to consider zoom
-     * @return floatPoint of the window's size in real coordinates
+     * @return FloatPoint of the window's size in real coordinates
      */
     private static FloatPoint getWindowSizeInRealScale() {
         //now we can return size in real scale by multiplying the screen sizes by the screen pixel sizes
