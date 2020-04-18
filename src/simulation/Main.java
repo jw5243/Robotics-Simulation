@@ -120,8 +120,10 @@ public class Main extends Application {
                     getFieldBackgroundImageView().setFitHeight(Screen.getFieldSizePixels());
                     debuggingHSpacer.setPrefWidth(16d);
                     debuggingLabel.setMaxWidth(getScene().getWidth() * 0.4d);
-                    debuggingLabel.setText("Robot Coordinates: \n" + "X (in): " + MessageProcessing.getRobotX() +
-                            ",\nY (in): " + MessageProcessing.getRobotY() + ",\nθ (deg): " + MessageProcessing.getRobotAngle());
+                    debuggingLabel.setText("Robot Coordinates:\n" + "X (in): " + MessageProcessing.getRobotX() +
+                            ",\nY (in): " + MessageProcessing.getRobotY() + ",\nθ (deg): " + MessageProcessing.getRobotAngle() +
+                            "\n\nLinear Extension Height:\nY (in): " + MessageProcessing.getLinearExtensionPosition() + "\nOverextension (in): " +
+                            Math.max(0d, (int)(100d * (MessageProcessing.getLinearExtensionPosition() - (MessageProcessing.getLinearStageCount() - 1) * MessageProcessing.getStageLength())) / 100d));
                     drawScreen(graphicsContext);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -150,16 +152,27 @@ public class Main extends Application {
             final FloatPoint startPosition = new FloatPoint(Screen.getScreenWidth() / 2 - 16d / Screen.getInchesPerPixel(), 0d);
             graphicsContext.setLineWidth(lineWidth);
             graphicsContext.setStroke(new Color(0d, 1d, 1d, 1d));
-            if (MessageProcessing.getLinearExtensionType().equals(MessageProcessing.LinearExtensionType.CASCADE)) {
+            if(MessageProcessing.getLinearExtensionType().equals(MessageProcessing.LinearExtensionType.CASCADE)) {
                 double stageHeightIncrement = MessageProcessing.getLinearExtensionPosition() / (MessageProcessing.getLinearStageCount() - 1);
-                for (int i = 0; i < MessageProcessing.getLinearStageCount(); i++) {
+                for(int i = 0; i < MessageProcessing.getLinearStageCount(); i++) {
                     graphicsContext.strokeRect(startPosition.x, Screen.getScreenHeight() - startPosition.y - MessageProcessing.getStageLength() / Screen.getInchesPerPixel(),
                             4d / Screen.getInchesPerPixel(), MessageProcessing.getStageLength() / Screen.getInchesPerPixel());
                     startPosition.x += 4d / Screen.getInchesPerPixel();
                     startPosition.y += stageHeightIncrement / Screen.getInchesPerPixel();
                 }
             } else {
-
+                int fullyExtendedStages = (int)(MessageProcessing.getLinearExtensionPosition() / MessageProcessing.getStageLength());
+                double currentStageDisplacement = MessageProcessing.getLinearExtensionPosition() - fullyExtendedStages * MessageProcessing.getStageLength();
+                for(int i = 0; i < MessageProcessing.getLinearStageCount(); i++) {
+                    graphicsContext.strokeRect(startPosition.x, Screen.getScreenHeight() - startPosition.y - MessageProcessing.getStageLength() / Screen.getInchesPerPixel(),
+                            4d / Screen.getInchesPerPixel(), MessageProcessing.getStageLength() / Screen.getInchesPerPixel());
+                    startPosition.x += 4d / Screen.getInchesPerPixel();
+                    if(i == MessageProcessing.getLinearStageCount() - fullyExtendedStages - 2) {
+                        startPosition.y += currentStageDisplacement / Screen.getInchesPerPixel();
+                    } else if(i > MessageProcessing.getLinearStageCount() - fullyExtendedStages - 2) {
+                        startPosition.y += MessageProcessing.getStageLength() / Screen.getInchesPerPixel();
+                    }
+                }
             }
         }
     }
