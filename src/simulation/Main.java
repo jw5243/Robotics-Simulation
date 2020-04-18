@@ -121,7 +121,7 @@ public class Main extends Application {
                     debuggingHSpacer.setPrefWidth(16d);
                     debuggingLabel.setMaxWidth(getScene().getWidth() * 0.4d);
                     debuggingLabel.setText("Robot Coordinates:\n" + "X (in): " + MessageProcessing.getRobotX() +
-                            ",\nY (in): " + MessageProcessing.getRobotY() + ",\nθ (deg): " + MessageProcessing.getRobotAngle() +
+                            ",\nY (in): " + MessageProcessing.getRobotY() + ",\nθ (deg): " + (MessageProcessing.getRobotAngle() * 180d / Math.PI) +
                             "\n\nLinear Extension Height:\nY (in): " + MessageProcessing.getLinearExtensionPosition() + "\nOverextension (in): " +
                             Math.max(0d, (int)(100d * (MessageProcessing.getLinearExtensionPosition() - (MessageProcessing.getLinearStageCount() - 1) * MessageProcessing.getStageLength())) / 100d));
                     drawScreen(graphicsContext);
