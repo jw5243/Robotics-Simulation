@@ -245,9 +245,11 @@ public class Main extends Application {
     }
 
     private void drawDebugPoints(GraphicsContext graphicsContext) {
+        final double lineWidth = 3d;
         final double pointRadius = 5d;
         final Function<Color, Consumer<FloatPoint>> drawPoint = (color) -> (displayLocation) -> {
             graphicsContext.setStroke(color);
+            graphicsContext.setLineWidth(lineWidth);
             graphicsContext.strokeOval(
                     displayLocation.x - pointRadius, displayLocation.y - pointRadius,
                     2d * pointRadius, 2d * pointRadius);
@@ -259,10 +261,10 @@ public class Main extends Application {
 
         if(!MessageProcessing.getPointLog().isEmpty()) {
             AtomicInteger index = new AtomicInteger(0);
-            getDisplayPoints().stream()
+            MessageProcessing.getPointLog().stream()
                     .map(Screen::convertToScreen)
                     .forEach((displayPoint) -> {
-                        drawPoint.apply(new Color(1d, 0d + (double) (index.getAndIncrement() / MessageProcessing.getPointLog().size()),
+                        drawPoint.apply(new Color(1d, (double)(index.getAndIncrement()) / MessageProcessing.getPointLog().size(),
                                 0d, 0.9d)).accept(displayPoint);
                     });
         }

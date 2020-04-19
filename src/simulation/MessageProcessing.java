@@ -229,7 +229,7 @@ public class MessageProcessing {
         //make sure the point doesn't already exist (close enough) in the list
         boolean alreadyExists = false;
         for(FloatPoint p : getPointLog()){
-            if(Math.hypot(p.x - toBeAddedMaybe.x, p.y - toBeAddedMaybe.y) < 1.5) {
+            if(Math.hypot(p.x - toBeAddedMaybe.x, p.y - toBeAddedMaybe.y) < 0.5d) {
                 alreadyExists = true;
             }
         }
