@@ -73,6 +73,14 @@ public class MessageProcessing {
                             setLinearExtensionType(LinearExtensionType.CONTINUOUS);
                         } else if(id.equals("Cascade")) {
                             setLinearExtensionType(LinearExtensionType.CASCADE);
+                        } else if(id.equals("LiftPosition")) {
+                            processLiftPosition(splitString);
+                        } else if(id.equals("LiftVelocity")) {
+                            processLiftVelocity(splitString);
+                        } else if(id.equals("LiftAcceleration")) {
+                            processLiftAcceleration(splitString);
+                        } else if(id.equals("LiftJerk")) {
+                            processLiftJerk(splitString);
                         }
                         
                         if(id.length() >= 5) {
@@ -112,7 +120,7 @@ public class MessageProcessing {
     }
 
     public static void processPosition(String[] splitString) {
-        if(splitString.length != 4 && ProfileDashboard.hasInitialized()) {
+        if(splitString.length != 4 || !ProfileDashboard.hasInitialized()) {
             return;
         }
         
@@ -121,7 +129,7 @@ public class MessageProcessing {
     }
     
     public static void processVelocity(String[] splitString) {
-        if(splitString.length != 4 && ProfileDashboard.hasInitialized()) {
+        if(splitString.length != 4 || !ProfileDashboard.hasInitialized()) {
             return;
         }
 
@@ -132,7 +140,7 @@ public class MessageProcessing {
     }
     
     public static void processAcceleration(String[] splitString) {
-        if(splitString.length != 4 && ProfileDashboard.hasInitialized()) {
+        if(splitString.length != 4 || !ProfileDashboard.hasInitialized()) {
             return;
         }
         
@@ -141,14 +149,45 @@ public class MessageProcessing {
     }
     
     public static void processJerk(String[] splitString) {
-        if(splitString.length != 4 && ProfileDashboard.hasInitialized()) {
+        if(splitString.length != 4 || !ProfileDashboard.hasInitialized()) {
             return;
         }
         
         ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.JERK, ProfileDashboard.Direction.X, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
         ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.JERK, ProfileDashboard.Direction.Y, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[3]));
     }
-    
+
+    public static void processLiftPosition(String[] splitString) {
+        if(splitString.length != 3 || !ProfileDashboard.hasInitialized()) {
+            return;
+        }
+
+        ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.POSITION, ProfileDashboard.Direction.LIFT, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
+    }
+
+    public static void processLiftVelocity(String[] splitString) {
+        if(splitString.length != 3 || !ProfileDashboard.hasInitialized()) {
+            return;
+        }
+
+        ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.VELOCITY, ProfileDashboard.Direction.LIFT, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
+    }
+
+    public static void processLiftAcceleration(String[] splitString) {
+        if(splitString.length != 3 || !ProfileDashboard.hasInitialized()) {
+            return;
+        }
+
+        ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.ACCELERATION, ProfileDashboard.Direction.LIFT, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
+    }
+
+    public static void processLiftJerk(String[] splitString) {
+        if(splitString.length != 3 || !ProfileDashboard.hasInitialized()) {
+            return;
+        }
+
+        ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.JERK, ProfileDashboard.Direction.LIFT, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
+    }
 
     /**
      * This processes the robot location and saves it's position

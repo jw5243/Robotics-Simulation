@@ -32,6 +32,8 @@ public class Main extends Application {
     private static final double SCREEN_SIZE_FACTOR = 0.75d;
     private static final double LOG_SIZE_FACTOR = 1 / 2.25d;
 
+    private static final boolean SHOW_GRAPH = true;
+
     private static final int DEFAULT_HORIZONTAL_SPACING = 100;
     private static final int DEFAULT_VERTICAL_SPACING   = 100;
 
@@ -49,6 +51,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
+        if(isShowGraph()) {
+            try {
+                Stage            stage     = new Stage();
+                ProfileDashboard dashboard = new ProfileDashboard();
+                dashboard.init();
+                dashboard.start(stage);
+                stage.show();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         setRootGroup(new Group());
         setLogGroup(new Group());
         setMainHBox(new HBox());
@@ -158,7 +172,11 @@ public class Main extends Application {
                     graphicsContext.strokeRect(startPosition.x, Screen.getScreenHeight() - startPosition.y - MessageProcessing.getStageLength() / Screen.getInchesPerPixel(),
                             4d / Screen.getInchesPerPixel(), MessageProcessing.getStageLength() / Screen.getInchesPerPixel());
                     startPosition.x += 4d / Screen.getInchesPerPixel();
-                    startPosition.y += stageHeightIncrement / Screen.getInchesPerPixel();
+                    if(stageHeightIncrement > MessageProcessing.getStageLength()) {
+                        startPosition.y += MessageProcessing.getStageLength() / Screen.getInchesPerPixel();
+                    } else {
+                        startPosition.y += stageHeightIncrement / Screen.getInchesPerPixel();
+                    }
                 }
             } else {
                 int fullyExtendedStages = (int)(MessageProcessing.getLinearExtensionPosition() / MessageProcessing.getStageLength());
@@ -356,5 +374,9 @@ public class Main extends Application {
 
     public static String getRobotRelativePath() {
         return ROBOT_RELATIVE_PATH;
+    }
+
+    public static boolean isShowGraph() {
+        return SHOW_GRAPH;
     }
 }

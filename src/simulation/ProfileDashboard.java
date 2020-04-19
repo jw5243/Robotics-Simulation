@@ -36,12 +36,10 @@ public class ProfileDashboard extends Application {
              * in runtime exceptions.
              *
              * @return The result of the background work, if any.
-             * @throws Exception an unhandled exception which occurred during the
-             *         background operation
              */
             @Override
-            protected Void call() throws Exception {
-                final ObservableList<XYChart.Series<Number, Number>> profiles            = getProfile().getData();
+            protected Void call() {
+                final ObservableList<XYChart.Series<Number, Number>> profiles = getProfile().getData();
                 if(profiles.size() >= ProfileType.values().length + Arrays.stream(Direction.values()).max(
                     Comparator.comparingInt(Direction::getValue)).get().getValue()) {
                     Platform.runLater(() -> profiles.get(profileType.getValue() + direction.getValue()).getData()
@@ -91,6 +89,11 @@ public class ProfileDashboard extends Application {
                     getProfile().getData()
                                 .add(new XYChart.Series<>("Y-Acceleration", FXCollections.observableList(new ArrayList<>())));
                     getProfile().getData().add(new XYChart.Series<>("Y-Jerk", FXCollections.observableList(new ArrayList<>())));
+                    getProfile().getData().add(new XYChart.Series<>("Lift-Position", FXCollections.observableList(new ArrayList<>())));
+                    getProfile().getData().add(new XYChart.Series<>("Lift-Velocity", FXCollections.observableList(new ArrayList<>())));
+                    getProfile().getData()
+                            .add(new XYChart.Series<>("Lift-Acceleration", FXCollections.observableList(new ArrayList<>())));
+                    getProfile().getData().add(new XYChart.Series<>("Lift-Jerk", FXCollections.observableList(new ArrayList<>())));
                 });
                 
                 return null;
@@ -151,7 +154,7 @@ public class ProfileDashboard extends Application {
     public void init() {
         setPrimaryContainer(new VBox());
         setProfile(
-            new LineChart<>(new NumberAxis("Time (seconds)", 0d, 15d, 5d), new NumberAxis("Profile", -25d, 100d, 5d)));
+            new LineChart<>(new NumberAxis("Time (seconds)", 0d, 10d, 5d), new NumberAxis("Profile", -60d, 100d, 10d)));
         
         getProfile().getData().add(new XYChart.Series<>("X-Position", FXCollections.observableList(new ArrayList<>())));
         getProfile().getData().add(new XYChart.Series<>("X-Velocity", FXCollections.observableList(new ArrayList<>())));
@@ -163,6 +166,11 @@ public class ProfileDashboard extends Application {
         getProfile().getData()
                     .add(new XYChart.Series<>("Y-Acceleration", FXCollections.observableList(new ArrayList<>())));
         getProfile().getData().add(new XYChart.Series<>("Y-Jerk", FXCollections.observableList(new ArrayList<>())));
+        getProfile().getData().add(new XYChart.Series<>("Lift-Position", FXCollections.observableList(new ArrayList<>())));
+        getProfile().getData().add(new XYChart.Series<>("Lift-Velocity", FXCollections.observableList(new ArrayList<>())));
+        getProfile().getData()
+                .add(new XYChart.Series<>("Lift-Acceleration", FXCollections.observableList(new ArrayList<>())));
+        getProfile().getData().add(new XYChart.Series<>("Lift-Jerk", FXCollections.observableList(new ArrayList<>())));
     }
     
     /**
@@ -238,7 +246,7 @@ public class ProfileDashboard extends Application {
     }
     
     public enum Direction {
-        X(0), Y(4);
+        X(0), Y(4), LIFT(8);
         
         private int value;
         
