@@ -33,6 +33,7 @@ public class Main extends Application {
     private static final double LOG_SIZE_FACTOR = 1 / 2.25d;
 
     private static final boolean SHOW_GRAPH = true;
+    private static final boolean AUTO_RANGE_GRAPH = true;
 
     private static final int DEFAULT_HORIZONTAL_SPACING = 100;
     private static final int DEFAULT_VERTICAL_SPACING   = 100;
@@ -380,5 +381,9 @@ public class Main extends Application {
 
     public static boolean isShowGraph() {
         return SHOW_GRAPH;
+    }
+
+    public static boolean isAutoRangeGraph() {
+        return AUTO_RANGE_GRAPH;
     }
 }
