@@ -81,6 +81,8 @@ public class MessageProcessing {
                             processLiftAcceleration(splitString);
                         } else if(id.equals("LiftJerk")) {
                             processLiftJerk(splitString);
+                        } else if(id.equals("LiftInput")) {
+                            processLiftInput(splitString);
                         }
                         
                         if(id.length() >= 5) {
@@ -187,6 +189,14 @@ public class MessageProcessing {
         }
 
         ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.JERK, ProfileDashboard.Direction.LIFT, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
+    }
+
+    public static void processLiftInput(String[] splitString) {
+        if(splitString.length != 3) {
+            return;
+        }
+
+        ProfileDashboard.addProfilePoint(ProfileDashboard.ProfileType.INPUT, ProfileDashboard.Direction.LIFT, Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
     }
 
     /**

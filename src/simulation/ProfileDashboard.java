@@ -1,5 +1,6 @@
 package simulation;
 
+import com.sun.javafx.charts.Legend;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -10,8 +11,11 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -91,9 +95,24 @@ public class ProfileDashboard extends Application {
                     //getProfile().getData().add(new XYChart.Series<>("Y-Jerk", FXCollections.observableList(new ArrayList<>())));
                     getProfile().getData().add(new XYChart.Series<>("Lift-Position", FXCollections.observableList(new ArrayList<>())));
                     getProfile().getData().add(new XYChart.Series<>("Lift-Velocity", FXCollections.observableList(new ArrayList<>())));
-                    getProfile().getData()
-                            .add(new XYChart.Series<>("Lift-Acceleration", FXCollections.observableList(new ArrayList<>())));
+                    getProfile().getData().add(new XYChart.Series<>("Lift-Acceleration", FXCollections.observableList(new ArrayList<>())));
                     getProfile().getData().add(new XYChart.Series<>("Lift-Setpoint", FXCollections.observableList(new ArrayList<>())));
+                    getProfile().getData().add(new XYChart.Series<>("Lift-Input", FXCollections.observableList(new ArrayList<>())));
+
+                    Legend legend = (Legend)(getProfile().lookup(".chart-legend"));
+                    Legend.LegendItem li1 = new Legend.LegendItem("Lift-Position", new Rectangle(10,4, Color.CYAN));
+                    Legend.LegendItem li2 = new Legend.LegendItem("Lift-Velocity", new Rectangle(10,4, Color.LIGHTPINK));
+                    Legend.LegendItem li3 = new Legend.LegendItem("Lift-Acceleration", new Rectangle(10,4, Color.LIGHTGREEN));
+                    Legend.LegendItem li4 = new Legend.LegendItem("Lift-Setpoint", new Rectangle(10,4, Color.LIGHTYELLOW));
+                    Legend.LegendItem li5 = new Legend.LegendItem("Lift-Input", new Rectangle(10,4, Color.CORNFLOWERBLUE));
+                    legend.getItems().setAll(li1, li2, li3, li4, li5);
+
+                    for(XYChart.Series series : getProfile().getData()) {
+                        Node line = series.getNode().lookup(".chart-series-line");
+                        Glow glow = new Glow();
+                        glow.setLevel(1d);
+                        line.setEffect(glow);
+                    }
                 });
                 
                 return null;
@@ -158,7 +177,7 @@ public class ProfileDashboard extends Application {
                     new LineChart<>(new NumberAxis(), new NumberAxis()));
         } else {
             setProfile(
-                    new LineChart<>(new NumberAxis("Time (seconds)", 0d, 10d, 5d), new NumberAxis("Profile", -60d, 100d, 10d)));
+                    new LineChart<>(new NumberAxis("Time (seconds)", 0d, 2.5d, 0.5d), new NumberAxis("Profile", -25d, 25d, 5d)));
         }
 
         //getProfile().getData().add(new XYChart.Series<>("X-Position", FXCollections.observableList(new ArrayList<>())));
@@ -173,9 +192,17 @@ public class ProfileDashboard extends Application {
         //getProfile().getData().add(new XYChart.Series<>("Y-Jerk", FXCollections.observableList(new ArrayList<>())));
         getProfile().getData().add(new XYChart.Series<>("Lift-Position", FXCollections.observableList(new ArrayList<>())));
         getProfile().getData().add(new XYChart.Series<>("Lift-Velocity", FXCollections.observableList(new ArrayList<>())));
-        getProfile().getData()
-                .add(new XYChart.Series<>("Lift-Acceleration", FXCollections.observableList(new ArrayList<>())));
+        getProfile().getData().add(new XYChart.Series<>("Lift-Acceleration", FXCollections.observableList(new ArrayList<>())));
         getProfile().getData().add(new XYChart.Series<>("Lift-Setpoint", FXCollections.observableList(new ArrayList<>())));
+        getProfile().getData().add(new XYChart.Series<>("Lift-Input", FXCollections.observableList(new ArrayList<>())));
+
+        Legend legend = (Legend)(getProfile().lookup(".chart-legend"));
+        Legend.LegendItem li1 = new Legend.LegendItem("Lift-Position", new Rectangle(10,4, Color.CYAN));
+        Legend.LegendItem li2 = new Legend.LegendItem("Lift-Velocity", new Rectangle(10,4, Color.LIGHTPINK));
+        Legend.LegendItem li3 = new Legend.LegendItem("Lift-Acceleration", new Rectangle(10,4, Color.LIGHTGREEN));
+        Legend.LegendItem li4 = new Legend.LegendItem("Lift-Setpoint", new Rectangle(10,4, Color.LIGHTYELLOW));
+        Legend.LegendItem li5 = new Legend.LegendItem("Lift-Input", new Rectangle(10,4, Color.CORNFLOWERBLUE));
+        legend.getItems().setAll(li1, li2, li3, li4, li5);
 
         if(Main.isAutoRangeGraph()) {
             getProfile().getXAxis().setLabel("Time (seconds)");
@@ -242,7 +269,7 @@ public class ProfileDashboard extends Application {
     }
     
     public enum ProfileType {
-        POSITION(0), VELOCITY(1), ACCELERATION(2), JERK(3);
+        POSITION(0), VELOCITY(1), ACCELERATION(2), JERK(3), INPUT(4);
         
         private int value;
         

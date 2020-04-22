@@ -68,3 +68,9 @@
     -fx-border-color: transparent;
     -fx-table-cell-border-color:transparent;
 }
+
+.default-color0.chart-series-line { -fx-stroke: cyan; }
+.default-color1.chart-series-line { -fx-stroke: lightpink; }
+.default-color2.chart-series-line { -fx-stroke: lightgreen; }
+.default-color3.chart-series-line { -fx-stroke: lightyellow; }
+.default-color4.chart-series-line { -fx-stroke: cornflowerblue; }
