@@ -218,11 +218,12 @@ public class MessageProcessing {
      * @param splitString
      */
     private static void processPoint(String[] splitString) {
-        if(splitString.length != 3) {
-            return;
+        if(splitString.length == 3) {
+            getDebugPoints().add(new FloatPoint(Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2])));
+        } else if(splitString.length == 4) {
+            getDebugPoints().add(new FloatPoint(Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]),
+                    Double.parseDouble(splitString[3]) / Screen.getInchesPerPixel()));
         }
-
-        getDebugPoints().add(new FloatPoint(Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2])));
     }
 
     /**

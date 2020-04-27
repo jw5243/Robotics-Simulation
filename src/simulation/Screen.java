@@ -47,14 +47,14 @@ public class Screen {
         FloatPoint topLeft = getTopLeftScreenRealPosition();
         //now get where the point is in respect to the top left.
         //HOWEVER the top left is above us, we don't want y to be negative so swap the y
-        FloatPoint relativeFromTopLeft = new FloatPoint(p.x - topLeft.x, topLeft.y - p.y);
+        FloatPoint relativeFromTopLeft = new FloatPoint(p.x - topLeft.x, topLeft.y - p.y, p.radius);
         
         //now we can get the percent that we are across the screen
         double percentX = relativeFromTopLeft.x / getWindowSizeInRealScale().x;
         double percentY = relativeFromTopLeft.y / getWindowSizeInRealScale().y;
         
         //now that we have percents, multiply by the width and height to get pixel coordinates
-        return new FloatPoint(percentX * getScreenWidth(), percentY * getScreenHeight());
+        return new FloatPoint(percentX * getScreenWidth(), percentY * getScreenHeight(), p.radius);
     }
     
     /**

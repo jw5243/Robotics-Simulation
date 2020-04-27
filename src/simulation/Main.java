@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -246,14 +247,12 @@ public class Main extends Application {
     }
 
     private void drawDebugPoints(GraphicsContext graphicsContext) {
-        final double lineWidth = 3d;
-        final double pointRadius = 5d;
         final Function<Color, Consumer<FloatPoint>> drawPoint = (color) -> (displayLocation) -> {
             graphicsContext.setStroke(color);
-            graphicsContext.setLineWidth(lineWidth);
+            graphicsContext.setLineWidth(3d * displayLocation.radius / 5d);
             graphicsContext.strokeOval(
-                    displayLocation.x - pointRadius, displayLocation.y - pointRadius,
-                    2d * pointRadius, 2d * pointRadius);
+                    displayLocation.x - displayLocation.radius, displayLocation.y - displayLocation.radius,
+                    2d * displayLocation.radius, 2d * displayLocation.radius);
         };
 
         getDisplayPoints().stream()
@@ -262,12 +261,16 @@ public class Main extends Application {
 
         if(!MessageProcessing.getPointLog().isEmpty()) {
             AtomicInteger index = new AtomicInteger(0);
-            MessageProcessing.getPointLog().stream()
-                    .map(Screen::convertToScreen)
-                    .forEach((displayPoint) -> {
-                        drawPoint.apply(new Color(1d, (double)(index.getAndIncrement()) / MessageProcessing.getPointLog().size(),
-                                0d, 0.9d)).accept(displayPoint);
-                    });
+            try {
+                MessageProcessing.getPointLog().stream()
+                        .map(Screen::convertToScreen)
+                        .forEach((displayPoint) -> {
+                            drawPoint.apply(new Color(1d, (double) (index.getAndIncrement()) / MessageProcessing.getPointLog().size(),
+                                    0d, 0.9d)).accept(displayPoint);
+                        });
+            } catch(ConcurrentModificationException e) {
+                e.printStackTrace();
+            }
         }
     }
 
