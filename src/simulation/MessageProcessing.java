@@ -27,6 +27,8 @@ public class MessageProcessing {
     private static int linearStageCount = 1;
     private static LinearExtensionType linearExtensionType = LinearExtensionType.CASCADE;
 
+    private static double timeStamp;
+
     public static void processMessage(String receivedMessage) {
         //first there might be multiple messages in one packet. These are separated by '%'
         String[] splitMessages = receivedMessage.split("%");
@@ -83,6 +85,8 @@ public class MessageProcessing {
                             processLiftJerk(splitString);
                         } else if(id.equals("LiftInput")) {
                             processLiftInput(splitString);
+                        } else if(id.equals("Time")) {
+                            processTime(splitString);
                         }
                         
                         if(id.length() >= 5) {
@@ -95,6 +99,14 @@ public class MessageProcessing {
                 }
             }
         }
+    }
+
+    public static void processTime(String[] splitString) {
+        if(splitString.length != 2) {
+            return;
+        }
+
+        setTimeStamp(Double.parseDouble(splitString[1]));
     }
 
     public static void processStageLength(String[] splitString) {
@@ -377,5 +389,13 @@ public class MessageProcessing {
 
     public static void setStageLength(double stageLength) {
         MessageProcessing.stageLength = stageLength;
+    }
+
+    public static double getTimeStamp() {
+        return timeStamp;
+    }
+
+    public static void setTimeStamp(double timeStamp) {
+        MessageProcessing.timeStamp = timeStamp;
     }
 }

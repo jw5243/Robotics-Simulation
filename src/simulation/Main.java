@@ -136,7 +136,7 @@ public class Main extends Application {
                     getFieldBackgroundImageView().setFitHeight(Screen.getFieldSizePixels());
                     debuggingHSpacer.setPrefWidth(16d);
                     debuggingLabel.setMaxWidth(getScene().getWidth() * 0.4d);
-                    debuggingLabel.setText("Robot Coordinates:\n" + "X (in): " + MessageProcessing.getRobotX() +
+                    debuggingLabel.setText("Time (s): " + (int)(100d * MessageProcessing.getTimeStamp()) / 100d + "\n\nRobot Coordinates:\n" + "X (in): " + MessageProcessing.getRobotX() +
                             ",\nY (in): " + MessageProcessing.getRobotY() + ",\nθ (deg): " + (int)(1000d * MessageProcessing.getRobotAngle() * 180d / Math.PI) / 1000d +
                             "\n\nLinear Extension Height:\nY (in): " + MessageProcessing.getLinearExtensionPosition() + "\nOverextension (in): " +
                             Math.max(0d, (int)(100d * (MessageProcessing.getLinearExtensionPosition() - (MessageProcessing.getLinearStageCount() - 1) * MessageProcessing.getStageLength())) / 100d));
@@ -269,7 +269,6 @@ public class Main extends Application {
                                     0d, 0.9d)).accept(displayPoint);
                         });
             } catch(ConcurrentModificationException e) {
-                e.printStackTrace();
             }
         }
     }
