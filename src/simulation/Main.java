@@ -33,7 +33,7 @@ public class Main extends Application {
     private static final double SCREEN_SIZE_FACTOR = 0.75d;
     private static final double LOG_SIZE_FACTOR = 1 / 2.25d;
 
-    private static final boolean SHOW_GRAPH = true;
+    private static final boolean SHOW_GRAPH = false;
     private static final boolean AUTO_RANGE_GRAPH = true;
 
     private static final int DEFAULT_HORIZONTAL_SPACING = 100;
