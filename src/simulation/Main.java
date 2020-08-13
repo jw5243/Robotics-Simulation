@@ -2,6 +2,7 @@ package simulation;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -9,6 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -33,8 +36,8 @@ public class Main extends Application {
     private static final double SCREEN_SIZE_FACTOR = 0.75d;
     private static final double LOG_SIZE_FACTOR = 1 / 2.25d;
 
-    private static final boolean SHOW_GRAPH = false;
-    private static final boolean AUTO_RANGE_GRAPH = true;
+    private static final boolean SHOW_GRAPH = true;
+    private static final boolean AUTO_RANGE_GRAPH = false;
 
     private static final int DEFAULT_HORIZONTAL_SPACING = 100;
     private static final int DEFAULT_VERTICAL_SPACING   = 100;
@@ -50,6 +53,31 @@ public class Main extends Application {
     private ImageView fieldBackgroundImageView;
     private ImageView logBackgroundImageView;
     private HBox mainHBox;
+
+    private EventHandler<KeyEvent> keyPressListener = event -> {
+        if(event.getCode() == KeyCode.UP) {
+            setKeyPress(KeyPress.UP);
+        } else if(event.getCode() == KeyCode.DOWN) {
+            setKeyPress(KeyPress.DOWN);
+        } else if(event.getCode() == KeyCode.RIGHT) {
+            setKeyPress(KeyPress.RIGHT);
+        } else if(event.getCode() == KeyCode.LEFT) {
+            setKeyPress(KeyPress.LEFT);
+        }
+    };
+
+    private EventHandler<KeyEvent> keyReleaseListener = event -> {
+        if(event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN ||
+                event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT) {
+            setKeyPress(KeyPress.NONE);
+        }
+    };
+
+    public enum KeyPress {
+        UP, DOWN, RIGHT, LEFT, NONE
+    }
+
+    private static KeyPress keyPress = KeyPress.NONE;
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
@@ -70,6 +98,8 @@ public class Main extends Application {
         setMainHBox(new HBox());
 
         setScene(new Scene(getRootGroup(), Screen.getScreenWidth(), Screen.getScreenHeight()));
+        getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyPressListener);
+        getScene().addEventHandler(KeyEvent.KEY_RELEASED, keyReleaseListener);
         getMainHBox().prefWidthProperty().bind(primaryStage.widthProperty());
         getMainHBox().prefHeightProperty().bind(primaryStage.heightProperty());
 
@@ -268,7 +298,7 @@ public class Main extends Application {
                             drawPoint.apply(new Color(1d, (double) (index.getAndIncrement()) / MessageProcessing.getPointLog().size(),
                                     0d, 0.9d)).accept(displayPoint);
                         });
-            } catch(ConcurrentModificationException e) {
+            } catch(ConcurrentModificationException | IllegalArgumentException e) {
             }
         }
     }
@@ -387,5 +417,13 @@ public class Main extends Application {
 
     public static boolean isAutoRangeGraph() {
         return AUTO_RANGE_GRAPH;
+    }
+
+    public static KeyPress getKeyPress() {
+        return keyPress;
+    }
+
+    public static void setKeyPress(KeyPress keyPress) {
+        Main.keyPress = keyPress;
     }
 }

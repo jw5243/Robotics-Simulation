@@ -220,9 +220,12 @@ public class MessageProcessing {
             return;
         }
 
-        setRobotX(Double.parseDouble(splitString[1]));
-        setRobotY(Double.parseDouble(splitString[2]));
-        setRobotAngle(Double.parseDouble(splitString[3]));
+        try {
+            setRobotX(Double.parseDouble(splitString[1]));
+            setRobotY(Double.parseDouble(splitString[2]));
+            setRobotAngle(Double.parseDouble(splitString[3]));
+        } catch(NumberFormatException e) {
+        }
     }
 
     /**
@@ -247,19 +250,22 @@ public class MessageProcessing {
             return;
         }
 
-        FloatPoint toBeAddedMaybe = new FloatPoint(Double.parseDouble(splitString[1]),
-                Double.parseDouble(splitString[2]));
-        //make sure the point doesn't already exist (close enough) in the list
-        boolean alreadyExists = false;
-        for(FloatPoint p : getPointLog()){
-            if(Math.hypot(p.x - toBeAddedMaybe.x, p.y - toBeAddedMaybe.y) < 0.5d) {
-                alreadyExists = true;
+        try {
+            FloatPoint toBeAddedMaybe = new FloatPoint(Double.parseDouble(splitString[1]),
+                    Double.parseDouble(splitString[2]));
+            //make sure the point doesn't already exist (close enough) in the list
+            boolean alreadyExists = false;
+            for (FloatPoint p : getPointLog()) {
+                if (Math.hypot(p.x - toBeAddedMaybe.x, p.y - toBeAddedMaybe.y) < 0.5d) {
+                    alreadyExists = true;
+                }
             }
-        }
 
-        //add it if it's unique
-        if(!alreadyExists) {
-            getPointLog().add(toBeAddedMaybe);
+            //add it if it's unique
+            if (!alreadyExists) {
+                getPointLog().add(toBeAddedMaybe);
+            }
+        } catch(NumberFormatException e) {
         }
     }
 

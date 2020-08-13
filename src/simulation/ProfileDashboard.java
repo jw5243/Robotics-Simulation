@@ -177,7 +177,7 @@ public class ProfileDashboard extends Application {
                     new LineChart<>(new NumberAxis(), new NumberAxis()));
         } else {
             setProfile(
-                    new LineChart<>(new NumberAxis("Time (seconds)", 0d, 2.5d, 0.5d), new NumberAxis("Profile", -25d, 25d, 5d)));
+                    new LineChart<>(new NumberAxis("Time (seconds)", 0d, 4d, 1d), new NumberAxis("Profile", -20d, 20d, 5d)));
         }
 
         //getProfile().getData().add(new XYChart.Series<>("X-Position", FXCollections.observableList(new ArrayList<>())));
